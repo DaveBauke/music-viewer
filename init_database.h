@@ -1,0 +1,4 @@
+#ifndef INIT_DATABASE_H
+#define INIT_DATABASE_H
+
+#endif // INIT_DATABASE_H
