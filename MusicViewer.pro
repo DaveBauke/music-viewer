@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT		 += sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -26,10 +27,20 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    init_database.cpp \
+    databaseconnector.cpp \
+    artist.cpp \
+    album.cpp \
+    track.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    init_database.h \
+    databaseconnector.h \
+    artist.h \
+    album.h \
+    track.h
 
 FORMS += \
         mainwindow.ui
