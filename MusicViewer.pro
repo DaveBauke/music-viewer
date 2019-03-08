@@ -32,7 +32,8 @@ SOURCES += \
     databaseconnector.cpp \
     artist.cpp \
     album.cpp \
-    track.cpp
+    track.cpp \
+    mycombobox.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -40,7 +41,8 @@ HEADERS += \
     databaseconnector.h \
     artist.h \
     album.h \
-    track.h
+    track.h \
+    mycombobox.h
 
 FORMS += \
         mainwindow.ui
