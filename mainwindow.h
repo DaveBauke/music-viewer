@@ -7,15 +7,17 @@
 #include <QLabel>
 #include <QTableView>
 #include <QWidget>
+#include <QSpacerItem>
+#include <QPushButton>
 
+#include "mycombobox.h"
 #include "databaseconnector.h"
 
 namespace Ui {
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
 	Q_OBJECT
 
 public:
@@ -32,25 +34,35 @@ private:
 	QVBoxLayout *main_layout_;
 	QHBoxLayout *label_layout_;
 	QHBoxLayout *combo_layout_;
+	QHBoxLayout *button_layout_;
 
-	QSqlQueryModel *artist_model_;
-	QSqlQueryModel *album_model_;
-	QSqlQueryModel *track_model_;
+	QTableView *outcome_table_;
 
-	QTableView *artist_table_;
-	QTableView *album_table_;
-	QTableView *track_table_;
+	MyComboBox *artist_cbox_;
+	MyComboBox *album_cbox_;
+	MyComboBox *possesion_cbox_;
 
-	QComboBox *artist_cbox_;
-	QComboBox *album_cbox_;
-	QComboBox *track_cbox_;
+	QPushButton *m_add_album;
+	QPushButton *m_search_albums;
+	QPushButton *m_search_tracks;
+	QPushButton *m_clear;
 
 	QLabel *label_;
 
 	void InitDisplay();
-	void InitArtistCombo();
-	void InitAlbumCombo();
-	void InitTrackCombo();
+	void InitComboBoxes();
+	void InitButtons();
+
+private slots:
+	void AddAlbumHandle();
+	void SearchAlbumsHandle();
+	void SearchTracksHandle();
+	void ClearHandle();
+
+	void ArtistSelected(int index);
+	void PossesionSelected(int index);
+
+	QString	AlbumComboBoxQuery(const QString &artist, QString possesion) const;
 };
 
 #endif // MAINWINDOW_H
