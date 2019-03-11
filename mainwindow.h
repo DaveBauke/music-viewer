@@ -29,14 +29,15 @@ private:
 
 	DatabaseConnector *dbc_;
 
-	QWidget *central_widget_;
+	QWidget *m_central_widget;
 
 	QVBoxLayout *main_layout_;
 	QHBoxLayout *label_layout_;
 	QHBoxLayout *combo_layout_;
 	QHBoxLayout *button_layout_;
 
-	QTableView *outcome_table_;
+	QTableView *m_outcome_table;
+	QSqlQueryModel *m_table_query;
 
 	MyComboBox *artist_cbox_;
 	MyComboBox *album_cbox_;
@@ -47,7 +48,7 @@ private:
 	QPushButton *m_search_tracks;
 	QPushButton *m_clear;
 
-	QLabel *label_;
+	QLabel *m_label;
 
 	void InitDisplay();
 	void InitComboBoxes();
@@ -62,7 +63,10 @@ private slots:
 	void ArtistSelected(int index);
 	void PossesionSelected(int index);
 
-	QString	AlbumComboBoxQuery(const QString &artist, QString possesion) const;
+	QString	AlbumsComboBoxQuery(const QString &artist, QString possesion) const;
+
+	QString AlbumTableQuery(const QString &artist, const QString &album, QString possesion) const;
+	QString TrackTableQuery(const QString &artist, const QString &album, QString possesion) const;
 };
 
 #endif // MAINWINDOW_H
