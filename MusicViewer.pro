@@ -33,7 +33,8 @@ SOURCES += \
     artist.cpp \
     album.cpp \
     track.cpp \
-    mycombobox.cpp
+    mycombobox.cpp \
+    addalbumdialog.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -42,7 +43,8 @@ HEADERS += \
     artist.h \
     album.h \
     track.h \
-    mycombobox.h
+    mycombobox.h \
+    addalbumdialog.h
 
 FORMS += \
         mainwindow.ui
