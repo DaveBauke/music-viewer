@@ -9,8 +9,9 @@ MyComboBox::MyComboBox(const QString &cbox_name, QWidget *parent) : m_parent(par
 
 	m_cbox->addItem("");
 
-	m_layout->addWidget(m_label);
+	m_layout->addWidget(m_label);		//add label, combo box
 	m_layout->addWidget(m_cbox);
+	m_layout->addStretch();				//and strech at the end so that there won't be space between label and cbox
 }
 
 MyComboBox::MyComboBox(const QString &cbox_name, const QString &query, QWidget *parent) : m_parent(parent) {
@@ -23,8 +24,9 @@ MyComboBox::MyComboBox(const QString &cbox_name, const QString &query, QWidget *
 
 	m_layout = new QVBoxLayout();
 
-	m_layout->addWidget(m_label);
+	m_layout->addWidget(m_label);		//add label, combo box
 	m_layout->addWidget(m_cbox);
+	m_layout->addStretch();				//and strech at the end so that there won't be space between label and cbox
 }
 
 MyComboBox::MyComboBox(const QString &cbox_name, const QStringList &item_list, QWidget *parent) : m_parent(parent) {
@@ -35,8 +37,9 @@ MyComboBox::MyComboBox(const QString &cbox_name, const QStringList &item_list, Q
 
 	m_layout = new QVBoxLayout();
 
-	m_layout->addWidget(m_label);
+	m_layout->addWidget(m_label);		//add label, combo box
 	m_layout->addWidget(m_cbox);
+	m_layout->addStretch();				//and strech at the end so that there won't be space between label and cbox
 }
 
 MyComboBox::~MyComboBox() {
@@ -51,7 +54,6 @@ bool MyComboBox::PopulateComboBox() {
 	if(!m_query)
 		return false;
 	m_cbox->clear();
-	//m_query->exec();
 
 	m_cbox->addItem("");
 	while(m_query->next()){
