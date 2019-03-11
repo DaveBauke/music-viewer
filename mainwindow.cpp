@@ -7,8 +7,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow) {
 	ui->setupUi(this);
 
-	dbc_ = new DatabaseConnector();
-	dbc_->OpenConnection();
+	m_dbc = new DatabaseConnector();
+	m_dbc->OpenConnection();
 
 //	DropTables();
 //	dbc.InitializeTables();
@@ -19,9 +19,9 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 MainWindow::~MainWindow() {
-	delete dbc_;
-	delete artist_cbox_;
-	delete album_cbox_;
+	delete m_dbc;
+	delete m_artist_cbox;
+	delete m_album_cbox;
 
 	delete m_add_album;
 	delete m_search_albums;
@@ -30,10 +30,10 @@ MainWindow::~MainWindow() {
 	delete m_outcome_table;
 	delete m_table_query;
 
-	delete label_layout_;
-	delete combo_layout_;
-	delete button_layout_;
-	delete main_layout_;
+	delete m_label_layout;
+	delete m_combo_layout;
+	delete m_button_layout;
+	delete m_main_layout;
 
 	delete m_central_widget;
 
@@ -47,53 +47,53 @@ void MainWindow::InitDisplay() {
 	InitComboBoxes();
 	InitButtons();
 
-	label_layout_ = new QHBoxLayout;	//create layouts
-	combo_layout_ = new QHBoxLayout;
-	button_layout_ = new QHBoxLayout;
-	main_layout_ = new QVBoxLayout;
+	m_label_layout = new QHBoxLayout;	//create layouts
+	m_combo_layout = new QHBoxLayout;
+	m_button_layout = new QHBoxLayout;
+	m_main_layout = new QVBoxLayout;
 
 	m_label = new QLabel("Welcome", this);			//create welcome text
 	QFont font;										//set it size
 	font.setPointSize(50);
 	m_label->setFont(font);
-	label_layout_->addWidget(m_label);				//add to layout
-	label_layout_->setAlignment(Qt::AlignmentFlag::AlignCenter);
-	main_layout_->addLayout(label_layout_);			//and add to main layout
+	m_label_layout->addWidget(m_label);				//add to layout
+	m_label_layout->setAlignment(Qt::AlignmentFlag::AlignCenter);
+	m_main_layout->addLayout(m_label_layout);			//and add to main layout
 
-	combo_layout_->addLayout(artist_cbox_->getLayout());	//add combo boxes with labels to cbox layout
-	combo_layout_->addLayout(album_cbox_->getLayout());
-	combo_layout_->addLayout(possesion_cbox_->getLayout());
-	main_layout_->addLayout(combo_layout_);					//and add it to main layout
+	m_combo_layout->addLayout(m_artist_cbox->getLayout());	//add combo boxes with labels to cbox layout
+	m_combo_layout->addLayout(m_album_cbox->getLayout());
+	m_combo_layout->addLayout(m_possesion_cbox->getLayout());
+	m_main_layout->addLayout(m_combo_layout);					//and add it to main layout
 
-	button_layout_->addWidget(m_add_album);					//add buttons to button layout
-	button_layout_->addWidget(m_search_albums);
-	button_layout_->addWidget(m_search_tracks);
-	button_layout_->addWidget(m_clear);
-	main_layout_->addLayout(button_layout_);				//and add it to main layout
+	m_button_layout->addWidget(m_add_album);					//add buttons to button layout
+	m_button_layout->addWidget(m_search_albums);
+	m_button_layout->addWidget(m_search_tracks);
+	m_button_layout->addWidget(m_clear);
+	m_main_layout->addLayout(m_button_layout);				//and add it to main layout
 
 	m_outcome_table = new QTableView();						//create outcome table and its query model
 	m_table_query = new QSqlQueryModel();
 	m_outcome_table->setModel(m_table_query);
-	main_layout_->addWidget(m_outcome_table);
+	m_main_layout->addWidget(m_outcome_table);
 	m_outcome_table->hide();
 
 	m_central_widget = new QWidget(this);					//create and add main widget
-	m_central_widget->setLayout(main_layout_);
+	m_central_widget->setLayout(m_main_layout);
 	this->setCentralWidget(m_central_widget);
 }
 
-//initializes combo boxes with artist album and possesion
+//initializes combo boxes and connects slots to currentIndexChanged(int) signals
 void MainWindow::InitComboBoxes() {
-	artist_cbox_ = new MyComboBox("Artist:", "SELECT name FROM artist ORDER BY name", this);
-	album_cbox_ = new MyComboBox("Album:", "SELECT name FROM album ORDER BY name", this);
+	m_artist_cbox = new MyComboBox("Artist:", "SELECT name FROM artist ORDER BY name", this);
+	m_album_cbox = new MyComboBox("Album:", "SELECT name FROM album ORDER BY name", this);
 	QStringList list;		list << "yes" << "no";
-	possesion_cbox_ = new MyComboBox("Owned", list, this);
+	m_possesion_cbox = new MyComboBox("Owned", list, this);
 
-	connect(artist_cbox_->getComboBox(),SIGNAL(currentIndexChanged(int)), this, SLOT(ArtistSelected(int)));
-	connect(possesion_cbox_->getComboBox(),SIGNAL(currentIndexChanged(int)), this, SLOT(PossesionSelected(int)));
+	connect(m_artist_cbox->getComboBox(),SIGNAL(currentIndexChanged(int)), this, SLOT(ArtistSelected(int)));
+	connect(m_possesion_cbox->getComboBox(),SIGNAL(currentIndexChanged(int)), this, SLOT(PossesionSelected(int)));
 }
 
-//initializes push buttons to add albums, search for albums or tracks and clear all searches
+//initializes push buttons and connects slots to clicked() signal
 void MainWindow::InitButtons() {
 	m_add_album = new QPushButton("Add album", this);
 	m_search_albums = new QPushButton("Search albums", this);
@@ -113,7 +113,7 @@ void MainWindow::AddAlbumHandle() {
 
 //Search albums slot displays table with albums of given artist or possesion
 void MainWindow::SearchAlbumsHandle() {
-	m_table_query->setQuery(AlbumTableQuery(artist_cbox_->itemText(), album_cbox_->itemText(), possesion_cbox_->itemText()));
+	m_table_query->setQuery(AlbumTableQuery(m_artist_cbox->itemText(), m_album_cbox->itemText(), m_possesion_cbox->itemText()));
 
 	m_outcome_table->resizeColumnToContents(2);		//fit owned and wanted column to proper size
 	m_outcome_table->resizeColumnToContents(3);
@@ -126,7 +126,7 @@ void MainWindow::SearchAlbumsHandle() {
 
 //Search tracks slot displays table with albums of given artist or album or possesion
 void MainWindow::SearchTracksHandle() {
-	m_table_query->setQuery(TrackTableQuery(artist_cbox_->itemText(), album_cbox_->itemText(), possesion_cbox_->itemText()));
+	m_table_query->setQuery(TrackTableQuery(m_artist_cbox->itemText(), m_album_cbox->itemText(), m_possesion_cbox->itemText()));
 
 	m_outcome_table->resizeColumnToContents(1);		//fit number column to proper size
 
@@ -137,48 +137,49 @@ void MainWindow::SearchTracksHandle() {
 	m_outcome_table->show();
 }
 
-//function sets default values in combo boxes
+//function sets default values in combo boxes and hides outcome table
 void MainWindow::ClearHandle() {
-	artist_cbox_->ClearSelection();
-	album_cbox_->ClearSelection();
-	possesion_cbox_->ClearSelection();
+	m_artist_cbox->ClearSelection();
+	m_album_cbox->ClearSelection();
+	m_possesion_cbox->ClearSelection();
 
 	m_outcome_table->hide();
 }
 
 //function called on artist selection in the artist combo box, fills album combo box respectively
 void MainWindow::ArtistSelected(int index) {
-	QString query = AlbumsComboBoxQuery(artist_cbox_->itemText(index), possesion_cbox_->itemText());
-	album_cbox_->PopulateComboBox(query);
+	QString query = AlbumsComboBoxQuery(m_artist_cbox->itemText(index), m_possesion_cbox->itemText());
+	m_album_cbox->PopulateComboBox(query);
 }
 
 //function called on owned selection in the possesion combo box, fills album combo box respectively
 void MainWindow::PossesionSelected(int index) {
-	QString query = AlbumsComboBoxQuery(artist_cbox_->itemText(), possesion_cbox_->itemText(index));
-	album_cbox_->PopulateComboBox(query);
+	QString query = AlbumsComboBoxQuery(m_artist_cbox->itemText(), m_possesion_cbox->itemText(index));
+	m_album_cbox->PopulateComboBox(query);
 }
 
 //function creates query with given artist and possesion used to fill album combo box
 QString MainWindow::AlbumsComboBoxQuery(const QString &artist, QString possesion) const {
 	QString query("SELECT alb.name FROM album alb");
 
-	if(artist != ""){
-		query += ", artist art WHERE art.id = alb.artist_id and art.name = '" + artist + "'";
+	if(artist != ""){											//if artist is given, artist table is also needed
+		query += ", artist art WHERE art.id = alb.artist_id"
+		         " AND art.name = '" + artist + "'";
 
 		if(possesion != "" ){
 			possesion = (possesion == "yes") ? "true" : "false";
 
-			query += " and alb.owned = " + possesion;
+			query += " AND alb.owned = " + possesion;
 		}
 	}
-	else{
+	else{														//no artist, just check for possesion
 		if(possesion != "" ){
 			possesion = (possesion == "yes") ? "true" : "false";
 			query += " WHERE alb.owned = " + possesion;
 		}
 	}
 
-	query += " ORDER BY alb.name";
+	query += " ORDER BY alb.name";								//sort
 
 	return query;
 }

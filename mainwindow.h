@@ -27,21 +27,21 @@ public:
 private:
 	Ui::MainWindow *ui;
 
-	DatabaseConnector *dbc_;
+	DatabaseConnector *m_dbc;
 
 	QWidget *m_central_widget;
 
-	QVBoxLayout *main_layout_;
-	QHBoxLayout *label_layout_;
-	QHBoxLayout *combo_layout_;
-	QHBoxLayout *button_layout_;
+	QVBoxLayout *m_main_layout;
+	QHBoxLayout *m_label_layout;
+	QHBoxLayout *m_combo_layout;
+	QHBoxLayout *m_button_layout;
 
 	QTableView *m_outcome_table;
 	QSqlQueryModel *m_table_query;
 
-	MyComboBox *artist_cbox_;
-	MyComboBox *album_cbox_;
-	MyComboBox *possesion_cbox_;
+	MyComboBox *m_artist_cbox;
+	MyComboBox *m_album_cbox;
+	MyComboBox *m_possesion_cbox;
 
 	QPushButton *m_add_album;
 	QPushButton *m_search_albums;
@@ -54,6 +54,11 @@ private:
 	void InitComboBoxes();
 	void InitButtons();
 
+	QString	AlbumsComboBoxQuery(const QString &artist, QString possesion) const;
+
+	QString AlbumTableQuery(const QString &artist, const QString &album, QString possesion) const;
+	QString TrackTableQuery(const QString &artist, const QString &album, QString possesion) const;
+
 private slots:
 	void AddAlbumHandle();
 	void SearchAlbumsHandle();
@@ -62,11 +67,6 @@ private slots:
 
 	void ArtistSelected(int index);
 	void PossesionSelected(int index);
-
-	QString	AlbumsComboBoxQuery(const QString &artist, QString possesion) const;
-
-	QString AlbumTableQuery(const QString &artist, const QString &album, QString possesion) const;
-	QString TrackTableQuery(const QString &artist, const QString &album, QString possesion) const;
 };
 
 #endif // MAINWINDOW_H
