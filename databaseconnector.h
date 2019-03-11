@@ -20,17 +20,14 @@ public:
 	bool OpenConnection();
 	bool FillDatabaseFromDir(const QDir &base_dir) const;
 
-
-
-
+	bool AddArtistsFromDir(const QDir &artists_dir) const;
+	bool AddAlbumsFromDir(const QDir &albums_dir, const Artist &artist) const;
+	bool AddTracksFromDir(const QDir &tracks_dir, const Album &album) const;
 
 	QSqlDatabase db;
 private:
 
 
-	bool AddArtistsFromDir(const QDir &artists_dir) const;
-	bool AddAlbumsFromDir(const QDir &albums_dir, const Artist &artist) const;
-	bool AddTracksFromDir(const QDir &tracks_dir, const Album &album) const;
 };
 
 #endif // DATABASECONNECTOR_H
