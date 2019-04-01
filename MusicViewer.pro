@@ -26,30 +26,37 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-        main.cpp \
-        mainwindow.cpp \
-    init_database.cpp \
-    databaseconnector.cpp \
-    artist.cpp \
-    album.cpp \
-    track.cpp \
-    mycombobox.cpp \
-    addalbumdialog.cpp
+    sources/addalbumdialog.cpp \
+    sources/album.cpp \
+    sources/artist.cpp \
+    sources/databaseconnector.cpp \
+    sources/init_database.cpp \
+    sources/main.cpp \
+    sources/mainwindow.cpp \
+    sources/mycombobox.cpp \
+    sources/track.cpp
+
+INCLUDEPATH += "W:\Programming\QtProjects\MusicViewer\headers"
 
 HEADERS += \
-        mainwindow.h \
-    init_database.h \
-    databaseconnector.h \
-    artist.h \
-    album.h \
-    track.h \
-    mycombobox.h \
-    addalbumdialog.h
+    headers/addalbumdialog.h \
+    headers/album.h \
+    headers/artist.h \
+    headers/databaseconnector.h \
+    headers/init_database.h \
+    headers/mainwindow.h \
+    headers/mycombobox.h \
+    headers/track.h
 
 FORMS += \
-        mainwindow.ui
+    forms/mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+SUBDIRS += \
+	MusicViewer.pro \
+	headers
+
